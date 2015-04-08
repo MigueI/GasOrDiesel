@@ -3,13 +3,6 @@ Miguel
 April 7, 2015  
 
 
-```
-## Warning: package 'ggplot2' was built under R version 3.1.3
-```
-
-```
-## Warning: package 'zoo' was built under R version 3.1.3
-```
 
 
 *Ever since some guy totaled my parked car a couple of weeks ago, I've been in the market for a replacement. I'm considering getting a car that uses diesel rather than gas, but is that economical? And if it is, when do I start seeing a return on my investment?*
@@ -20,7 +13,7 @@ We'll get our gas and diesel data from Quandl.
 
 We see that the two are very closely related, but for the past couple of years diesel has been a little bit more expensive. But remember that diesel cars, which are more expenisive, also get better milage. If gasoline and diesel prices continue to increase as they have been, let's see if better milage translates to savings.
 
-As an example, let's look at the 2015 VW Jetta SE (with Connectivity), which comes in either a gasoline ($22,325; 25/34 mpg) or a diesel ($24,075; 31/46 mpg) model. These two models have basically the same features (seats, navigation, etc.), save for the fuel they use.
+As an example, let's look at the 2015 VW Jetta SE (with Connectivity), which comes in either a gasoline ($22,325; 25/34 mpg) or a diesel ($24,075; 31/46 mpg) model. These two models have basically the same features (seats, navigation, etc.), save for the fuel they use.  To estimate the combined fuel economy of each car we'll use the standard implemented by fueleconomy.gov, which is 55% city driving and 45% highway driving. This gives us a 29 mpg rating for the gas car and a 38 mpg rating for the diesel car. 
 
 
 
