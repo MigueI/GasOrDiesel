@@ -1,0 +1,145 @@
+---
+title: "Gasoline or Diesel"
+author: "Miguel"
+date: "April 7, 2015"
+output: html_document
+---
+
+```{r, echo=FALSE}
+suppressPackageStartupMessages(library(ggthemes))
+suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(tidyr))
+suppressPackageStartupMessages(library(lubridate))
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(Quandl))
+Quandl.auth("zUXjyRxxWJgECwzzPQ8Z")
+```
+
+
+*Ever since some guy totaled my parked car a couple of weeks ago, I've been in the market for a replacement. I'm considering getting a car that uses diesel rather than gas, but is that economical? And if it is, when do I start seeing a return on my investment?*
+
+We'll get our gas and diesel data from Quandl.
+
+```{r, echo=FALSE, fig.width=10}
+diesel <- Quandl("BTS_MM/MOTOR_FUEL_DIESEL_PRICE")
+gas <- Quandl("BTS_MM/MOTOR_FUEL_GASOLINE_PRICE")
+
+# Combine data sets, use only price in dollars.
+fuel <- left_join(gas[1:2], diesel[1:2], by="Date")
+names(fuel)[2] <- paste("gas")
+names(fuel)[3] <- paste("diesel")
+
+fuel <- fuel %>% gather("fuel","price", 2:3)
+
+ggplot(fuel, aes(Date, price, col=fuel)) + 
+  geom_line() + 
+  xlab("Date") +
+  ylab("Price per Gallon ($)") +  
+  scale_color_discrete("Fuel") + 
+  ggtitle("Price of Gasoline vs. Diesel Over Time") +
+  geom_smooth(method="lm")
+
+# Find difference.
+fuel <- fuel %>% 
+  spread(fuel, price) %>%
+  mutate("diff" = (diesel - gas))
+```
+
+We see that the two are very closely related, but for the past couple of years diesel has been a little bit more expensive. But remember that diesel cars, which are more expenisive, also get better milage. If gasoline and diesel prices continue to increase as they have been, let's see if better milage translates to savings.
+
+As an example, let's look at the 2015 VW Jetta SE (with Connectivity), which comes in either a gasoline ($22,325; 25/34 mpg) or a diesel ($24,075; 31/46 mpg) model. These two models have basically the same features (seats, navigation, etc.), save for the fuel they use.
+
+```{r, echo=FALSE}
+# Calculate a combined MPG (according to fuel economy.gov):
+g_mpg <- 25*0.55 + 34*0.45 
+d_mpg <- 31*0.55 + 46*0.45
+
+# Car prices.
+dieselcar <- 24075 
+gascar <- 22325
+
+# Number of miles I drive in a year and in a day (based on previous car).
+mi_year <- (40000-15000)/5
+mi_day <- mi_year/365.25
+```
+
+How long do I need to drive a diesel to make up for the initial price difference? We'll use a simplistic linear model to predict gas and diesel prices over the next couple of years. Then we'll find the cumulative sum of the cost of fuel over time. 
+
+```{r, echo=FALSE, fig.width=10}
+# Clean data for model.
+fuel <- fuel %>% mutate(Date = parse_date_time(Date, "ymd")) %>%
+  mutate(day = as.numeric(as.duration(interval(Date[1], Date)))/(60*60*24)) %>%
+  mutate(day = day - day[nrow(fuel)])
+
+# Make linear model.
+gmodel <- lm(gas ~ day, data = fuel)
+dmodel <- lm(diesel ~ day, data = fuel)
+g <- coefficients(gmodel)
+d <- coefficients(dmodel)
+# So gas increases by $0.00042 per day, and diesel by $0.00049 per day, 
+# and currently, the price is $3.47 per gallon of gas and $3.78 per gallon of diesel.
+
+# Make chart for next 10000 days. Each day, compute the total amount of
+# money spend on gas that day. This ends up being about $2 per day.
+cost <- data.frame("day" = seq(0,10000)) %>%
+  mutate(gas = g[2]*day + g[1]) %>%
+  mutate(diesel = d[2]*day + d[1]) %>%
+  mutate(gdaycost = gas/g_mpg*mi_day) %>%
+  mutate(ddaycost = gas/d_mpg*mi_day) %>%
+  mutate(Gas = 0) %>%
+  mutate(Diesel = 0) %>%
+  mutate(year = day/365.25)
+
+# Find total amount spent, rather than just cost per year.
+# Also factor in original cost difference.
+for(i in seq(1,10001)){
+  cost$Gas[i] <- sum(cost$gdaycost[1:i]) + gascar
+  cost$Diesel[i] <- sum(cost$ddaycost[1:i]) + dieselcar
+  }
+
+cost <- cost %>%
+  gather("Fuel", "total", 6:7)
+
+ggplot(cost, aes(year, total, col=Fuel)) + 
+  geom_point() +
+  xlab("Time (year)") + 
+  ylab("Cumulative Cost ($)") +
+  coord_cartesian(xlim = c(0, 20), ylim = c(20000,40000)) +
+  ggtitle("Cumulative Cost Comparison of\n Diesel and Gas Cars\n(Assuming 5,000 mi per Year)")
+```
+
+So remember, the y axis shows the cumulative cost. So the diesel price starts off much more expensive, since the diesel engine is about $2000 more than the gasoline engine. Even despite the more expensive diesel prices, the better mileage ends up making the diesel car *cheaper* in the long run! How long are we talking? According to this model, 10 years, which isn't quite as good as we hoped. 
+
+We should remember that our linear model was based of off 15 years of gas prices, so it may not be the most accurate model ever. Also, remember that I used an estimate of 5,000 miles per year, which may not be representative of most people, or even representative of my own driving habits once I finish college and get a job. Adjusting this factor to match the average driving distance of a 20-30 year old male (15,000 mi), we see that the diesel model ends up being cheaper after about 3-5 years.
+
+```{r, echo=FALSE, fig.width=10}
+mi_day <- 15000/365.25
+
+cost <- data.frame("day" = seq(0,10000)) %>%
+  mutate(gas = g[2]*day + g[1]) %>%
+  mutate(diesel = d[2]*day + d[1]) %>%
+  mutate(gdaycost = gas/g_mpg*mi_day) %>%
+  mutate(ddaycost = gas/d_mpg*mi_day) %>%
+  mutate(Gas = 0) %>%
+  mutate(Diesel = 0) %>%
+  mutate(year = day/365.25)
+
+for(i in seq(1,10001)){
+  cost$Gas[i] <- sum(cost$gdaycost[1:i]) + gascar
+  cost$Diesel[i] <- sum(cost$ddaycost[1:i]) + dieselcar
+  }
+
+cost <- cost %>%
+  gather("Fuel", "total", 6:7)
+
+ggplot(cost, aes(year, total, col=Fuel)) + 
+  geom_point() +
+  xlab("Time (year)") + 
+  ylab("Cumulative Cost ($)") +
+  coord_cartesian(xlim = c(0, 10), ylim = c(20000,50000)) +
+  ggtitle("Cumulative Cost Comparison of\n Diesel and Gas Cars\n(Assuming 15,000 mi per Year)")
+```
+
+I was curious about the accuracy of my model, and found [this study](http://www.dieselforum.org/files/dmfile/20130311_cd_umtritcofinalreport_dd2017.pdf) by The University of Michigan Transportation Research Institute. They also found that the return on investment happened around 3 to 5 years for most cars, though they took into account a couple of other factors like depreciation value and repairs. It turns out that diesel cars retain their value better since they are more expensive to begin with, and the engines tend to last much longer. The enviromental aspects are also not considered.
+
+So I guess if I plan on driving like the typical 20 to 30 year old male, I'd better get a diesel!
