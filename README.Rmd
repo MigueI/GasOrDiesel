@@ -49,7 +49,7 @@ fuel <- fuel %>%
 
 We see that the two are very closely related, but for the past couple of years diesel has been a little bit more expensive. But remember that diesel cars, which are more expenisive, also get better milage. If gasoline and diesel prices continue to increase as they have been, let's see if better milage translates to savings.
 
-As an example, let's look at the 2015 VW Jetta SE (with Connectivity), which comes in either a gasoline ($22,325; 25/34 mpg) or a diesel ($24,075; 31/46 mpg) model. These two models have basically the same features (seats, navigation, etc.), save for the fuel they use. To estimate the combined fuel economy of each car we'll use the standard implemented by fueleconomy.gov, which is 55% city driving and 45% highway driving. This gives us a 29 mpg rating for the gas car and a 38 mpg rating for the diesel car. 
+As an example, let's look at the 2015 VW Jetta SE (with Connectivity), which comes in either a gasoline ($22,325; 25/34 mpg) or a diesel ($24,075; 31/46 mpg) model. These two models have basically the same features (seats, navigation, etc.), save for the fuel they use.  To estimate the combined fuel economy of each car we'll use the standard implemented by fueleconomy.gov, which is 55% city driving and 45% highway driving. This gives us a 29 mpg rating for the gas car and a 38 mpg rating for the diesel car. 
 
 ```{r, echo=FALSE}
 # Calculate a combined MPG (according to fuel economy.gov):
