@@ -16,13 +16,21 @@ We'll get our gas and diesel data from Quandl. The data sets contain weekly gaso
 diesel <- Quandl("BTS_MM/MOTOR_FUEL_DIESEL_PRICE")
 ```
 
-
+```
+## Warning in Quandl("BTS_MM/MOTOR_FUEL_DIESEL_PRICE"): It would appear you
+## aren't using an authentication token. Please visit http://www.quandl.com/
+## help/r or your usage may be limited.
+```
 
 ```r
 gas <- Quandl("BTS_MM/MOTOR_FUEL_GASOLINE_PRICE")
 ```
 
-
+```
+## Warning in Quandl("BTS_MM/MOTOR_FUEL_GASOLINE_PRICE"): It would appear you
+## aren't using an authentication token. Please visit http://www.quandl.com/
+## help/r or your usage may be limited.
+```
 
 Next we'll define some of our inputs. These can be adjusted depending on the car models we're comparing or they type of driving I expect to do.
 
@@ -72,6 +80,6 @@ Note that for the above calulation I used an estimate of 5,000 miles per year, w
 
 ### Conclusions and Limitations
 
-I was curious about the accuracy of my model, and found [this study](http://www.dieselforum.org/files/dmfile/20130311_cd_umtritcofinalreport_dd2017.pdf) by The University of Michigan Transportation Research Institute. They also found that the return on investment happened around 3 to 5 years for most cars, though they took into account a couple of other factors like depreciation value and repairs. Some positives I haven't considered: diesel cars retain their value better since they are more expensive to begin with, and the engines tend to last much longer. As for negatives, maintenance and repairs tend to be a little costlier for diesel cars. The enviromental aspects are not considered. 
+I was curious about the accuracy of my model so I did some digging and found [this study](http://www.dieselforum.org/files/dmfile/20130311_cd_umtritcofinalreport_dd2017.pdf) by The University of Michigan Transportation Research Institute. They showed that the return on investment happened around 3 to 5 years for most cars, though they took into account a couple of other factors like depreciation value and repairs. Some positives I haven't considered: diesel cars retain their value better since they are more expensive to begin with, and the engines tend to last much longer. As for negatives, maintenance and repairs tend to be a little costlier for diesel cars. The enviromental aspects are not considered, though manufacturers assure us that ``clean diesel" is just as enviromental impacting as gasoline. 
 
-If I plan on driving like the typical 20 to 30 year old male, I guess I'd better get a diesel!
+If I plan on driving like the typical 20 to 30 year old male, then I guess I'd better get a diesel!
