@@ -17,7 +17,7 @@ suppressWarnings(suppressPackageStartupMessages(library(Quandl)))
 ```
 
 
-*Ever since my parked car was totaled a couple of weeks ago, I've been in the market for a replacement. I'm considering getting a car that uses diesel rather than gas, but is that economical? And if it is, when do I start seeing a return on my investment?*
+*Ever since my parked car was totaled a couple of weeks ago, I've been in the market for a replacement. I'm considering getting a car that uses diesel rather than gas, but I wanted to make sure that it was economical.*
 
 ### Load Data and Set Parameters
 
@@ -28,14 +28,14 @@ diesel <- Quandl("BTS_MM/MOTOR_FUEL_DIESEL_PRICE")
 gas <- Quandl("BTS_MM/MOTOR_FUEL_GASOLINE_PRICE")
 ```
 
-Next we'll define some of our inputs. These can be adjusted depending on the car models we're comparing or they type of driving I expect to do.
+Next we'll define some of our inputs. These can be adjusted depending on the car models we're comparing or the type of driving I expect to do.
 
 ```{r}
 # Calculate a combined MPG with the 45/55 ratio specified by fuel economy.gov:
 g_mpg <- 25*0.55 + 34*0.45 
 d_mpg <- 31*0.55 + 46*0.45
 
-# Car prices.
+# Car prices of the VW Jetta.
 dieselcar <- 24075 
 gascar <- 22325
 
@@ -49,7 +49,7 @@ avg_day <- 15000/365.25
 
 ### Gas and Diesel Prices: Linear Model
 
-Let's take a look at our data, and see if we can fit a linear model to gas prices and another to diesel prices.
+Let's take a look at our data, and see if we can fit one linear model to gas prices and another to diesel prices.
 
 ```{r, echo=FALSE, fig.width=10}
 # Combine data sets, use only price in dollars.
@@ -73,7 +73,7 @@ fuel <- fuel %>%
   mutate("diff" = (diesel - gas))
 ```
 
-We see that the two are very closely related, but for the past couple of years diesel has been a little bit more expensive. But remember that diesel cars, which are more expenisive, also get better milage. If gasoline and diesel prices continue to increase as they have been, let's see if better milage translates to savings.
+We see that the two are very closely related, but for the past couple of years diesel has been a little bit more expensive. Diesel cars are usually more expenisive, but they also get better milage. If gasoline and diesel prices continue to increase as they have been, does the better milage end up saving the diesel?
 
 ### The Options
 
@@ -160,6 +160,7 @@ ggplot(cost, aes(year, total, col=Fuel)) +
 
 ### Conclusions and Limitations
 
-I was curious about the accuracy of my model so I did some digging and found [this study](http://www.dieselforum.org/files/dmfile/20130311_cd_umtritcofinalreport_dd2017.pdf) by The University of Michigan Transportation Research Institute. They showed that the return on investment happened around 3 to 5 years for most cars, though they took into account a couple of other factors like depreciation value and repairs. Some positives I haven't considered: diesel cars retain their value better since they are more expensive to begin with, and the engines tend to last much longer. As for negatives, maintenance and repairs tend to be a little costlier for diesel cars. The enviromental aspects are not considered, though manufacturers assure us that ``clean diesel" is just as enviromental impacting as gasoline. 
+I was curious about the accuracy of my model so I did some digging and found [this study](http://www.dieselforum.org/files/dmfile/20130311_cd_umtritcofinalreport_dd2017.pdf) by The University of Michigan Transportation Research Institute. They showed that the return on investment happened around 3 to 5 years for most cars, although they took into account a couple of other factors like depreciation value and repairs. Some positives I haven't considered: diesel cars retain their value better since they are more expensive to begin with, and the engines tend to last much longer. As for negatives, maintenance and repairs tend to be a little costlier for diesels. The enviromental aspects are not considered, though manufacturers assure us that "clean diesel" (which contains much less sulfur than the diesel of the 1980's) has a the same enviromental impact as gasoline. 
 
-If I plan on driving like the typical 20 to 30 year old male, then I guess I'd better get a diesel!
+Overall, we see compelling evidence that getting a diesel car could save me around $2,000 over the next 8 years. 
+
