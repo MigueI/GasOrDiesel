@@ -1,5 +1,5 @@
 # Gasoline or Diesel
-Miguel Connor  
+Miguel Connor, Reed College  
 April 7, 2015  
 
 

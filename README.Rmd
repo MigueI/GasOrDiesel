@@ -1,13 +1,13 @@
 ---
 title: "Gasoline or Diesel"
-author: "Miguel Connor"
+author: "Miguel Connor, Reed College"
 date: "April 7, 2015"
 output:
   html_document:
     keep_md: yes
 ---
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 suppressWarnings(suppressPackageStartupMessages(library(ggthemes)))
 suppressWarnings(suppressPackageStartupMessages(library(dplyr)))
 suppressWarnings(suppressPackageStartupMessages(library(tidyr)))
@@ -15,7 +15,6 @@ suppressWarnings(suppressPackageStartupMessages(library(lubridate)))
 suppressWarnings(suppressPackageStartupMessages(library(ggplot2)))
 suppressWarnings(suppressPackageStartupMessages(library(Quandl)))
 suppressWarnings(suppressPackageStartupMessages(library(scales)))
-Quandl.auth("izVwTt9m5VoEe7TsEzdr")
 ```
 
 
