@@ -16,21 +16,13 @@ We'll get our gas and diesel data from Quandl. The data sets contain weekly gaso
 diesel <- Quandl("BTS_MM/MOTOR_FUEL_DIESEL_PRICE")
 ```
 
-```
-## Warning in Quandl("BTS_MM/MOTOR_FUEL_DIESEL_PRICE"): It would appear you
-## aren't using an authentication token. Please visit http://www.quandl.com/
-## help/r or your usage may be limited.
-```
+
 
 ```r
 gas <- Quandl("BTS_MM/MOTOR_FUEL_GASOLINE_PRICE")
 ```
 
-```
-## Warning in Quandl("BTS_MM/MOTOR_FUEL_GASOLINE_PRICE"): It would appear you
-## aren't using an authentication token. Please visit http://www.quandl.com/
-## help/r or your usage may be limited.
-```
+
 
 Next we'll define some of our inputs. These can be adjusted depending on the car models we're comparing or they type of driving I expect to do.
 
